@@ -54,6 +54,24 @@ class ArticlesRepository extends ServiceEntityRepository
 //        ;
 //    }
 
+    /**
+     * Ceci est la méthode qui nous renvoit 3 articles liés à un article
+     */
+    public function findLastThreeRelatedArticles($idCategory, $idArticle) {
+
+        return $this->createQueryBuilder('a')
+        ->where('a.category = :idCategory')
+        ->setParameter('idCategory', $idCategory)
+        ->andWhere('a.id <> :idArticle')
+        ->setParameter('idArticle', $idArticle)
+        ->orderBy('a.date', 'DESC')
+        ->setMaxResults(3)
+        ->getQuery()
+        ->getResult();
+
+    }
+
+
 //    public function findOneBySomeField($value): ?Articles
 //    {
 //        return $this->createQueryBuilder('a')
