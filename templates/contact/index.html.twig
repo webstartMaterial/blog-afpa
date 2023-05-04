@@ -2,6 +2,22 @@
 
 {% block title %}Contact{% endblock %}
 
+{% form_theme contact_form 'bootstrap_5_layout.html.twig' %}
+
+
 {% block body %}
+
+    <div class="main-content p-5">
+
+        {# Afficher les msg flash#}
+        {% for msg in app.flashes('confirmation') %}
+            <div class="alert alert-success">
+                {{ msg }}
+            </div>
+        {% endfor %}
+    
+        {{ form(contact_form) }}
+
+    </div>
 
 {% endblock %}
