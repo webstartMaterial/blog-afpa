@@ -9,11 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'app_contact')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
 
         // créer le formulaire à partir de l'instance de la classe Contact
@@ -23,6 +24,21 @@ class ContactController extends AbstractController
         $contact = new Contact();
         $form = $this->createForm(ContactType::class, $contact);
         $form->handleRequest($request);
+
+        // SI VOUS VOULEZ RÉCUPÉRER LES MESSAGES D'ERREUR
+        // ET LES AFFICHER DIFFÉREMENT
+        // if ($form->isSubmitted()) {
+
+            // $errors = $validator->validate($contact);
+
+            // if (count($errors) > 0) {
+        
+            //     return $this->render('contact/index.html.twig', [
+            //         'contact_form' => $form,
+            //         'errors' => $errors
+            //     ]);
+            // }
+        // }
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -36,7 +52,7 @@ class ContactController extends AbstractController
         }
 
         return $this->render('contact/index.html.twig', [
-            'contact_form' => $form,
+            'contact_form' => $form
         ]);
 
     }

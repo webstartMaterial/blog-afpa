@@ -28,6 +28,14 @@
     <div class="main-content px-5">
 
         <div class="inner-content">
+
+            {# Afficher les msg flash#}
+            {% for msg in app.flashes('confirmation') %}
+                <div class="alert alert-success">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+
             <h1 class="mb-5"> Nos derniers articles </h1>
 
                 {% for article in listArticles %}

@@ -6,6 +6,8 @@ use App\Repository\ArticlesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use phpDocumentor\Reflection\Types\Nullable;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArticlesRepository::class)]
 class Articles
@@ -32,6 +34,11 @@ class Articles
 
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
+
+    #[Assert\Image(
+        maxSize: "1024k"
+    )]
+    private $posterFile;
 
     #[ORM\Column(nullable:true)]
     private array $relatedSubjects = [];
@@ -65,6 +72,19 @@ class Articles
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+
+    public function getPosterFile(): ?UploadedFile
+    {
+        return $this->posterFile;
+    }
+
+    public function setPosterFile(UploadedFile $posterFile): self
+    {
+        $this->posterFile = $posterFile;
 
         return $this;
     }

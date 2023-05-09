@@ -88,4 +88,10 @@ class Category
 
         return $this;
     }
+
+    // Quest-ce que je veux afficher à l'écran quand j'ai un objet Category
+    public function __toString() {
+        return $this->getName();
+    }
+
 }

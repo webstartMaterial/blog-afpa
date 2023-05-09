@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Articles;
 use App\Entity\Category;
+use App\Form\ArticlesType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -25,10 +27,27 @@ class ArticlesController extends AbstractController
         ]);
     }
 
+    #[Route('/article/{id}/delete', name: 'delete_article', requirements: ['id' => '\d+'])]
+    public function deleteArticle(EntityManagerInterface $entityManager, string $id, Request $request): Response {
+
+        // si j'ai un post
+        // je récupère le paramètre POST ID
+        $id = $request->get('id');
+        $article = $entityManager->getRepository(Articles::class)->find($id);
+        $entityManager->remove($article);
+        $entityManager->flush();
+
+        // rediriger vers la page d'accueil avec un msg de confirmation
+
+        $this->addFlash('confirmation', 'L\'article a bien été supprimé !');
+        return $this->redirectToRoute('app_home');
+
+    }   
+
     // route multiple
     // je récupère un article
-    #[Route('/article/{id}', name: 'show_article_by_id', requirements: ['id' => '\d+'])]
-    public function showArticle(EntityManagerInterface $entityManager, string $id): Response
+    #[Route('/article/{id}', name: 'show_article_by_id', requirements: ['id' => '\d+'], methods : ['GET'])]
+    public function showArticle(EntityManagerInterface $entityManager, string $id, Request $request): Response
     {
 
         // récupérer l'article en bdd avec l'id de mon article
@@ -47,6 +66,44 @@ class ArticlesController extends AbstractController
             'article' => $article,
             'relatedArticles' => $relatedArticles
         ]);
+    }
+
+    /**
+     * CETTE MÉTHODE PERMET DE MODIFIER UN ARTICLE
+     */
+    #[Route('/article/{id}/modify', name: 'modify_article', requirements: ['id' => '\d+'])]
+    public function modifyArticle(EntityManagerInterface $entityManager, string $id, Request $request) {
+
+        // faut récupérer l'article en BDD qui à l'id $id
+        // ensuite créer le formulaire via ArticleType
+        // render la page articles/article-modify.html.twig
+        // faut render le formulaire dans cette page
+
+        $article = $entityManager->getRepository(Articles::class)->find($id); // récupère l'article en BDD
+        $form = $this->createForm(ArticlesType::class, $article);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            if($file = $article->getPosterFile()) {
+                $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+                $file->move('./', $fileName);
+
+                $article->setPicture($fileName);
+            }
+
+            $entityManager->persist($article);
+            $entityManager->flush();
+
+            $this->addFlash('confirmation', 'Votre article a bien été modifié en BDD');
+
+        }
+
+        return $this->render('articles/modify.html.twig', [
+            'articles_form' => $form->createView(),
+        ]);
+
     }
 
     /**
