@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block meta_description %} {% endblock %}
+{% block title %} {% endblock %}
+
+{% form_theme add_article_form 'bootstrap_5_layout.html.twig' %}
+
+
+{% block body %}
+
+    <div class="mt-5 pt-5 px-5 d-flex flex-column align-items-center">
+
+        {{ form_start(add_article_form) }}
+
+            {{ form_row(add_article_form.title) }}
+            {{ form_row(add_article_form.catchPhrase) }}
+            {{ form_row(add_article_form.date) }}
+            {{ form_row(add_article_form.author) }}
+            {{ form_row(add_article_form.description) }}
+            {{ form_row(add_article_form.posterFile) }}
+            {{ form_row(add_article_form.relatedSubjects) }}
+            {{ form_row(add_article_form.chapo) }}
+            {{ form_row(add_article_form.legendMainPicture) }}
+            {{ form_row(add_article_form.authorWebsite) }}
+            {{ form_row(add_article_form.relatedCourse) }}
+            {{ form_row(add_article_form.category) }}
+            {{ form_row(add_article_form.Modifier, { 'label': 'Ajouter' }) }}
+
+        {{ form_end(add_article_form) }}
+        
+    </div>
+
+{% endblock %}

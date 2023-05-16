@@ -10,8 +10,23 @@
 
     <div class="mt-5 pt-5 px-5 d-flex flex-column align-items-center">
 
-        {{ form(articles_form) }}
+        {{ form_start(articles_form) }}
 
+            {{ form_row(articles_form.title) }}
+            {{ form_row(articles_form.catchPhrase) }}
+            {{ form_row(articles_form.date) }}
+            {{ form_row(articles_form.author) }}
+            {{ form_row(articles_form.description) }}
+            <img style="width:100px;border:2px solid black" src="{{asset('images/articles/' ~ article.picture)}}"/>
+            {{ form_row(articles_form.posterFile) }}
+            {{ form_row(articles_form.relatedSubjects) }}
+            {{ form_row(articles_form.chapo) }}
+            {{ form_row(articles_form.legendMainPicture) }}
+            {{ form_row(articles_form.authorWebsite) }}
+            {{ form_row(articles_form.relatedCourse) }}
+            {{ form_row(articles_form.category) }}
+
+        {{ form_end(articles_form) }}
         
     </div>
 

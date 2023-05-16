@@ -34,6 +34,11 @@ class ArticlesController extends AbstractController
         // je récupère le paramètre POST ID
         $id = $request->get('id');
         $article = $entityManager->getRepository(Articles::class)->find($id);
+
+        if($picture = $article->getPicture()) { // si j'ai une image, je la supprimer lors de la suppression de l'article
+            @unlink('./images/articles/' . $picture);
+        }
+
         $entityManager->remove($article);
         $entityManager->flush();
 
@@ -87,8 +92,8 @@ class ArticlesController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
 
             if($file = $article->getPosterFile()) {
-                $fileName = md5(uniqid()) . '.' . $file->guessExtension();
-                $file->move('./', $fileName);
+                $fileName = md5(uniqid()) . '.' . $file->guessExtension(); // je formate le nom
+                $file->move('./images/articles/', $fileName); // je le copie sur le serveur
 
                 $article->setPicture($fileName);
             }
@@ -97,11 +102,14 @@ class ArticlesController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('confirmation', 'Votre article a bien été modifié en BDD');
+            return $this->redirectToRoute('app_home');
+
 
         }
 
         return $this->render('articles/modify.html.twig', [
             'articles_form' => $form->createView(),
+            'article' => $article
         ]);
 
     }
@@ -123,6 +131,46 @@ class ArticlesController extends AbstractController
             'listArticles' => $articles,
             'category' => $category->getName()
         ]);
+    }
+
+    /**
+     * Cette méthode permet de créer un article
+     */
+    #[Route('/article/new', name: 'create_article')]
+    public function createArticle(EntityManagerInterface $entityManager, Request $request): Response
+    {
+
+        $article = new Articles();
+        $form = $this->createForm(ArticlesType::class, $article);
+        $form->handleRequest($request);
+
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            // dd($form->getData());
+
+
+            if($file = $article->getPosterFile()) {
+                $fileName = md5(uniqid()) . '.' . $file->guessExtension(); // je formate le nom
+                $file->move('./images/articles/', $fileName); // je le copie sur le serveur
+
+                $article->setPicture($fileName);
+            }
+
+            // 1ere solution
+            $entityManager->persist($article);
+            $entityManager->flush();
+
+            $this->addFlash('confirmation', 'L\'article a bien été ajouté !');
+            return $this->redirectToRoute('app_home');
+
+
+        }
+
+        return $this->render('articles/new.html.twig', [
+            'add_article_form' => $form->createView()
+        ]);
+
     }
 
 }
