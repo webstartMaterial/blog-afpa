@@ -6,6 +6,7 @@
 parameters:
     locale: 'fr'
     app.path.article_images: /images/articles
+    app.mail_address: "%env(MAIL_ADDRESS)%"
 
 services:
     # default configuration for services in *this* file
