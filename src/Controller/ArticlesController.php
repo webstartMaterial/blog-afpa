@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Articles;
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Form\ArticlesType;
+use App\Form\CommentType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -61,6 +63,29 @@ class ArticlesController extends AbstractController
 
         $article = $entityManager->getRepository(Articles::class)->findBy([ "id" => $id ])[0];
 
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            $comment->setArticle($article);
+            $comment->setDate(new \DateTime);
+            $comment->setUser($this->getUser());
+            $comment->setIsValid(false);
+
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            $this->addFlash('confirmation', 'Votre commentaire sera examiné sous 24h00');
+
+        }
+
+        // récupérer tous les commentaires
+        $comments = $entityManager->getRepository(Comment::class)->findAllValidComments($id);
+
+
         // récupères moi en BDD
         // Les trois articles les plus récents liés à cette catégory
         // différent de l'article en cours
@@ -69,7 +94,9 @@ class ArticlesController extends AbstractController
 
         return $this->render('articles/article.html.twig', [
             'article' => $article,
-            'relatedArticles' => $relatedArticles
+            'relatedArticles' => $relatedArticles,
+            'form_comment' => $form,
+            'comments' => $comments
         ]);
     }
 

@@ -33,6 +33,30 @@
 
     </div>
 
+    <div>
+
+             {% if app.user %}
+                <div class="col-md-8 mx-auto">
+                    {{ form(form_comment) }}
+                </div>
+            {% endif %}
+
+                <div class="col-md-8 mx-auto">
+                    <h5 class="text-less-grey "> Commentaires : </h5>
+                    {% for comment in comments %}
+                        <div class="comment p-3 my-3">
+
+                            <span class="text-grey fst-italic"> {{ comment.user.firstName }} </span>
+
+                            <p class="text-less-grey"> {{ comment.comment }} </p>
+                            <span class="text-grey"> {{ comment.date|date('d-m-Y') }} </span>
+
+                        </div>
+                    {% endfor %}
+                </div>
+
+    </div>
+
     <div class="mt-5 ps-5 mx-auto">
         <h2> Articles similaires </h2>
 
