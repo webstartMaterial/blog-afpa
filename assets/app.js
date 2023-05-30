@@ -19,5 +19,53 @@ import $ from 'jquery';
 //import greet from '../greet';
 
 $(document).ready(function() {
+
     console.log("hello World");
+
+    // $(window).keydown(function(event){
+    //     if(event.keyCode == 13) {
+    //       event.preventDefault();
+    //       return false;
+    //     }
+    //   });
+
+    $("#search-content").on('keydown', function(e) {
+        if(e.key === "Enter" || e.keyCode === 13) {
+            e.preventDefault();// j'empêche le formulaire de se soumettre
+
+            $.ajax({
+                url:'/search',
+                data: {
+                    "search": $("#search-content").val()
+                },
+                dataType: 'json',
+                success: function (data) // obj json => un array d'objet
+                {
+                    let contentHtml = "";
+
+                    contentHtml += "<h1 class='mb-5'> Nos articles liés à la recherche ' " + $("#search-content").val() + " ' </h1>";
+
+                    for(let i = 0; i < data.length; i++) {
+                        contentHtml += "<div class='article d-flex my-3'>"+
+                                "<a class='d-flex text-decoration-none text-reset' href='/article/" + data[i].id + "'>"+
+                                    "<img src='/images/articles/" + data[i].picture + "'>"+
+                                    "<div class='d-flex flex-column ps-2'>"+   
+                                        "<h2>" + data[i].title + " - " + data[i].date + " </h2>"+
+                                        "<p>" + data[i].description  + " </p>"+
+                                    "</div>"+
+                                "</a>"+
+                            "</div>";
+                    }
+                    
+                    // dans la classe inner-content
+                    // met le contenu
+                    $(".inner-content").html(contentHtml);
+                    
+
+                }
+            });
+        }
+    });
+
+
 });
