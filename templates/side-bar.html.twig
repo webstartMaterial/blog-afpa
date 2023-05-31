@@ -1,0 +1,17 @@
+<div class="side-bar bg-primary">
+
+    <div class="logo"> </div>
+    <div class="photo"> </div>
+    <div class="list-categories"> 
+
+        <ul>
+            {% for category in listCategories %}
+                <li class="my-3">
+                    <a class="text-white" href="{{ path('show_articles_by_category', {id : category.id}) }}"> {{category.name}} </a>
+                </li>
+            {% endfor %}
+        </ul>
+    
+    </div>
+
+</div>

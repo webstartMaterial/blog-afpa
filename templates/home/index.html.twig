@@ -7,57 +7,44 @@
 
 {% block body %}
 
-    <div class="side-bar p-3">
+    {% include 'side-bar.html.twig' %}
 
-        <div class="logo"> </div>
-        <div class="photo"> </div>
-        <div class="list-categories"> 
 
-            <ul>
-                {% for category in listCategories %}
-                   <li class="my-3">
-                        <a href="{{ path('show_articles_by_category', {id : category.id}) }}"> {{category.name}} </a>
-                   </li>
-                {% endfor %}
-            </ul>
-        
-        </div>
+    <div class="inner-content">
 
-    </div>
+        {# Afficher les msg flash#}
+        {% for msg in app.flashes('confirmation') %}
+            <div class="alert alert-success">
+                {{ msg }}
+            </div>
+        {% endfor %}
 
-    <div class="main-content px-5">
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{path('create_article')}}" class="btn btn-success"> Créer un article </a>
+        {% endif %}
 
-        <div class="inner-content">
+        <h1 class="mb-5"> Nos derniers articles </h1>
 
-            {# Afficher les msg flash#}
-            {% for msg in app.flashes('confirmation') %}
-                <div class="alert alert-success">
-                    {{ msg }}
+            {% for article in listArticles %}
+
+                <div class="article d-flex flex-column align-items-start my-3">
+                    <a class="d-flex text-decoration-none text-reset" href="{{ path('show_article_by_id', { id : article.id }) }}">
+                        <img src="{{ asset('images/articles/' ~ article.picture ) }}" />
+                        <div class="d-flex flex-column ps-2">   
+                            <h2>{{ article.title }} - {{ article.date|date("d-m-Y") }} </h2>
+                            <p>{{ article.chapo }} </p>
+                        </div>
+                    </a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <button id="{{article.id}}" class="delete-button btn btn-danger mt-3"> Supprimer </button>
+                    {% endif %}
                 </div>
+
             {% endfor %}
 
-            <a href="{{path('create_article')}}" class="btn btn-success"> Créer un article </a>
-
-            <h1 class="mb-5"> Nos derniers articles </h1>
-
-                {% for article in listArticles %}
-
-                    <div class="article d-flex my-3">
-                        <a class="d-flex text-decoration-none text-reset" href="{{ path('show_article_by_id', { id : article.id }) }}">
-                            <img src="{{ asset('images/articles/' ~ article.picture ) }}" />
-                            <div class="d-flex flex-column ps-2">   
-                                <h2>{{ article.title }} - {{ article.date|date("d-m-Y") }} </h2>
-                                <p>{{ article.chapo }} </p>
-                            </div>
-                        </a>
-                    </div>
-
-                {% endfor %}
-
-                <div class="navigation">
-                    {{ knp_pagination_render(listArticles) }}
-                </div>
-        </div>
+            <div class="navigation">
+                {{ knp_pagination_render(listArticles) }}
+            </div>
     </div>
 
 

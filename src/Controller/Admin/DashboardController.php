@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Articles;
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Contact;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -49,5 +50,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Nos articles', 'fas fa-file-text', Articles::class);
         yield MenuItem::linkToCrud('Nos categories', 'fas fa-file-text', Category::class);
         yield MenuItem::linkToCrud('Nos messages', 'fas fa-file-text', Contact::class);
+        yield MenuItem::linkToCrud('Commentaires', 'fas fa-file-text', Comment::class);
     }
 }

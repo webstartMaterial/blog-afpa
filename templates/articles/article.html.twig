@@ -5,7 +5,7 @@
 
 {% block body %}
 
-    <div class="mt-5 pt-5 px-5 d-flex flex-column align-items-center">
+    <div class="d-flex flex-column align-items-center">
 
         <h1 class="mb-3"> {{ article.title }} </h1>
 
@@ -17,8 +17,8 @@
         <div class="mb-3"> {{ article.author }} {{ article.date|date('d-m-Y') }} </div>
 
         <div>
-            <img src="{{ asset('images/articles/' ~ article.picture ) }}" alt="{{ article.chapo }}" title="{{ article.chapo }}" />
-            <p> {{ article.legendMainPicture }} </p>
+            <img width="500" src="{{ asset('images/articles/' ~ article.picture ) }}" alt="{{ article.chapo }}" title="{{ article.chapo }}" />
+            <p class="my-3"> {{ article.legendMainPicture }} </p>
         </div>
 
         <p class="mt-5"> {{article.description}} </p>
@@ -35,46 +35,55 @@
 
     <div>
 
-             {% if app.user %}
+            {% if app.user %}
                 <div class="col-md-8 mx-auto">
                     {{ form(form_comment) }}
                 </div>
             {% endif %}
 
-                <div class="col-md-8 mx-auto">
-                    <h5 class="text-less-grey "> Commentaires : </h5>
-                    {% for comment in comments %}
-                        <div class="comment p-3 my-3">
+                {% if comments|length > 0 %}
 
-                            <span class="text-grey fst-italic"> {{ comment.user.firstName }} </span>
+                    <div class="col-md-8 mx-auto">
+                        <h5 class="text-less-grey "> Commentaires : </h5>
+                        {% for comment in comments %}
+                            <div class="comment p-3 my-3">
 
-                            <p class="text-less-grey"> {{ comment.comment }} </p>
-                            <span class="text-grey"> {{ comment.date|date('d-m-Y') }} </span>
+                                <span class="text-grey fst-italic"> {{ comment.user.firstName }} </span>
 
-                        </div>
-                    {% endfor %}
-                </div>
+                                <p class="text-less-grey"> {{ comment.comment }} </p>
+                                <span class="text-grey"> {{ comment.date|date('d-m-Y') }} </span>
+
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                {% endif %}
 
     </div>
 
-    <div class="mt-5 ps-5 mx-auto">
-        <h2> Articles similaires </h2>
+    {% if relatedArticles|length > 0 %}
 
-        <div class="d-flex">
-            {% for relatedArticle in relatedArticles %} 
+        <div class="mt-5 ps-5 mx-auto">
+            <h2> Articles similaires </h2>
 
-                <div class="article d-flex my-3 mx-auto">
-                    <a class="d-flex text-decoration-none text-reset" href="{{ path('show_article_by_id', { id : relatedArticle.id }) }}">
-                        <img src="{{ asset('images/articles/' ~ relatedArticle.picture ) }}" />
-                        <div class="d-flex flex-column ps-2">   
-                            <h6>{{ relatedArticle.title }} - {{ relatedArticle.date|date("d-m-Y") }} </h6>
-                            <p>{{ article.chapo }} </p>
-                        </div>
-                    </a>
-                </div>
+            <div class="d-flex">
+                {% for relatedArticle in relatedArticles %} 
 
-            {% endfor %}   
+                    <div class="article d-flex my-3 mx-auto">
+                        <a class="d-flex text-decoration-none text-reset" href="{{ path('show_article_by_id', { id : relatedArticle.id }) }}">
+                            <img src="{{ asset('images/articles/' ~ relatedArticle.picture ) }}" />
+                            <div class="d-flex flex-column ps-2">   
+                                <h6>{{ relatedArticle.title }} - {{ relatedArticle.date|date("d-m-Y") }} </h6>
+                                <p>{{ article.chapo }} </p>
+                            </div>
+                        </a>
+                    </div>
+
+                {% endfor %}   
+            </div>
         </div>
-    </div>
+    
+    {% endif %}
+
 
 {% endblock %}

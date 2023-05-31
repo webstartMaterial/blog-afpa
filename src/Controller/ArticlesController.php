@@ -53,7 +53,7 @@ class ArticlesController extends AbstractController
 
     // route multiple
     // je récupère un article
-    #[Route('/article/{id}', name: 'show_article_by_id', requirements: ['id' => '\d+'], methods : ['GET'])]
+    #[Route('/article/{id}', name: 'show_article_by_id', requirements: ['id' => '\d+'])]
     public function showArticle(EntityManagerInterface $entityManager, string $id, Request $request): Response
     {
 
@@ -197,6 +197,27 @@ class ArticlesController extends AbstractController
         return $this->render('articles/new.html.twig', [
             'add_article_form' => $form->createView()
         ]);
+
+    }
+
+
+    #[Route('/delete', name: 'delete')]
+    public function delete(EntityManagerInterface $entityManager, Request $request): Response
+    {
+
+        // si j'ai un post
+        // je récupère le paramètre POST ID
+        $id = $request->get('id');
+        $article = $entityManager->getRepository(Articles::class)->find($id);
+
+        if($picture = $article->getPicture()) { // si j'ai une image, je la supprimer lors de la suppression de l'article
+            @unlink('./images/articles/' . $picture);
+        }
+
+        $entityManager->remove($article);
+        $entityManager->flush();
+
+        return new Response(Response::HTTP_OK);
 
     }
 

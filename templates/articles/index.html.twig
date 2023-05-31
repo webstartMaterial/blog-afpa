@@ -4,23 +4,18 @@
 
 {% block body %}
 
-    <div class="main-content px-5">
+    <h1 class="mb-5">Nos articles liés à la catégorie <span class="text-primary">'{{ category }}' </span></h1>
 
-        <h1> Nos articles liés à la catégorie <span class="text-primary">{{ category }}</span> </h1>
+    {% for article in listArticles %}
+        <div class="article d-flex">
+            <a class="d-flex text-decoration-none text-reset" href="{{ path('show_article_by_id', { id : article.id }) }}">
+                <img src="{{ asset('images/articles/' ~ article.picture ) }}" />
+                <div class="d-flex flex-column ps-2">   
+                    <h2>{{ article.title }} - {{ article.date|date("d-m-Y") }} </h2>
+                    <p>{{ article.chapo }} </p>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
 
-        {% for article in listArticles %}
-
-            <div class="article d-flex my-3">
-                <a class="d-flex text-decoration-none text-reset" href="{{ path('show_article_by_id', { id : article.id }) }}">
-                    <img src="{{ asset('images/articles/' ~ article.picture ) }}" />
-                    <div class="d-flex flex-column ps-2">   
-                        <h2>{{ article.title }} - {{ article.date|date("d-m-Y") }} </h2>
-                        <p>{{ article.chapo }} </p>
-                    </div>
-                </a>
-            </div>
-
-        {% endfor %}
-
-    </div>
 {% endblock %}

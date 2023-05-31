@@ -67,5 +67,32 @@ $(document).ready(function() {
         }
     });
 
+    //
+    // Gérer la suppression d'un article en asynchrone
+    //
+    $(".delete-button").on('click', function() {
+
+
+        // id article
+        let id = $(this).attr("id");
+        console.log(id);
+
+        let article = $(this).closest('.article'); // permet de récupérer l'article (le block html)
+        // à faire disparaitre après suppression
+
+        $.ajax({
+            url:'/delete',
+            method: 'POST',
+            data: {
+                "id": id
+            },
+            dataType: 'json',
+            success: function (data) // obj json => un array d'objet
+            {
+                article.remove(); // je supprime le block html de la page
+            }
+        });
+
+    });
 
 });

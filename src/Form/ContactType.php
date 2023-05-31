@@ -19,27 +19,39 @@ class ContactType extends AbstractType
     {
         $builder
             ->add('firstName', TextType::class, [
+                'row_attr' => [
+                    'class' => 'col-md-6'
+                ],
                 'label' => 'Prénom',
                 'attr' => array(
                     'placeholder' => 'Entrer votre prénom'
                 )
             ])
             ->add('lastName', TextType::class, [
+                'row_attr' => [
+                    'class' => 'col-md-6'
+                ],
                 'label' => 'Nom',
                 'attr' => array(
                     'placeholder' => 'Entrer votre nom'
                 )
             ])
             ->add('email', EmailType::class, [
+                'row_attr' => [
+                    'class' => 'col-md-6'
+                ],
                 'label' => 'Email',
                 'attr' => array(
                     'placeholder' => 'Entrer votre email'
                 )
             ])
-            ->add('message', TextareaType::class, [
-                'label' => 'Votre message',
+            ->add('phone', TextType::class, [
+                'row_attr' => [
+                    'class' => 'col-md-6'
+                ],
+                'label' => 'Votre numéro de téléphone',
                 'attr' => array(
-                    'placeholder' => 'Entrer votre message ici'
+                    'placeholder' => 'Entrer votre numéro de téléphone'
                 )
             ])
             ->add('object', ChoiceType::class, [
@@ -50,10 +62,10 @@ class ContactType extends AbstractType
                     'Je souhaite vous contacter par choix 3' => 'Choix 3'
                 ]
             ])
-            ->add('phone', TextType::class, [
-                'label' => 'Votre numéro de téléphone',
+            ->add('message', TextareaType::class, [
+                'label' => 'Votre message',
                 'attr' => array(
-                    'placeholder' => 'Entrer votre numéro de téléphone'
+                    'placeholder' => 'Entrer votre message ici'
                 )
             ])
             ->add('save', SubmitType::class, [
