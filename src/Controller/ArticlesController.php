@@ -176,6 +176,22 @@ class ArticlesController extends AbstractController
 
             // dd($form->getData());
 
+            // si j'ai une catégorie de rentrée dans le formulaire
+                // je la créer
+                // et je set cette catégorie créée en BDD dans mon article
+            
+            if(!is_null($form->get('newCategory')->getData()) && !empty($form->get('newCategory')->getData())) {
+
+                $category = new Category();
+                $category->setName($form->get('newCategory')->getData());
+                $category->setDescription("");
+
+                $entityManager->persist($category);
+                $article->setCategory($category);
+
+            }
+            
+            // sinon je fais ce qu'il y a en dessous
 
             if($file = $article->getPosterFile()) {
                 $fileName = md5(uniqid()) . '.' . $file->guessExtension(); // je formate le nom

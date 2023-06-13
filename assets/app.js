@@ -95,4 +95,9 @@ $(document).ready(function() {
 
     });
 
+    $("#showNewCategory").click(function(e) {
+        e.preventDefault();
+        $('.show_category').toggleClass('d-none');
+    });
+
 });

@@ -5,6 +5,10 @@
     <div class="list-categories"> 
 
         <ul>
+            <li>             
+                <a href="{{path('create_category')}}" class="btn btn-success"> Créer catégorie </a>
+            </li>
+
             {% for category in listCategories %}
                 <li class="my-3">
                     <a class="text-white" href="{{ path('show_articles_by_category', {id : category.id}) }}"> {{category.name}} </a>

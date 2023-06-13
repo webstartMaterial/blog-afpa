@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CategoryController!{% endblock %}
+
+{% form_theme category_form 'bootstrap_5_layout.html.twig' %}
+
+{% block body %}
+
+        <h1>Ajouter une catégorie</h1>
+
+        {{ form(category_form) }}
+
+{% endblock %}
